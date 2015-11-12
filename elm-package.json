@@ -1,0 +1,14 @@
+{
+    "version": "1.0.0",
+    "summary": "My first app built from scratch with Elm",
+    "repository": "https://github.com/adicirstei/elm-first.git",
+    "license": "MIT",
+    "source-directories": [
+        "."
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "2.1.0 <= v < 3.0.0"
+    },
+    "elm-version": "0.15.1 <= v < 0.16.0"
+}
