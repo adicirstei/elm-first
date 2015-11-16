@@ -4588,16 +4588,16 @@ Elm.Main.make = function (_elm) {
    $Effects = Elm.Effects.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $RandomGif = Elm.RandomGif.make(_elm),
+   $RandomGifList = Elm.RandomGifList.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp = Elm.StartApp.make(_elm),
    $Task = Elm.Task.make(_elm);
    var app = $StartApp.start({_: {}
-                             ,init: $RandomGif.init("funny cats")
+                             ,init: $RandomGifList.init
                              ,inputs: _L.fromArray([])
-                             ,update: $RandomGif.update
-                             ,view: $RandomGif.view});
+                             ,update: $RandomGifList.update
+                             ,view: $RandomGifList.view});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",
    app.tasks);
@@ -12953,6 +12953,215 @@ Elm.RandomGif.make = function (_elm) {
                            ,randomUrl: randomUrl
                            ,decodeImageUrl: decodeImageUrl};
    return _elm.RandomGif.values;
+};
+Elm.RandomGifList = Elm.RandomGifList || {};
+Elm.RandomGifList.make = function (_elm) {
+   "use strict";
+   _elm.RandomGifList = _elm.RandomGifList || {};
+   if (_elm.RandomGifList.values)
+   return _elm.RandomGifList.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "RandomGifList",
+   $Basics = Elm.Basics.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $RandomGif = Elm.RandomGif.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var is13 = function (code) {
+      return _U.eq(code,
+      13) ? $Result.Ok({ctor: "_Tuple0"}) : $Result.Err("not the right code");
+   };
+   var onEnter = F2(function (address,
+   value) {
+      return A3($Html$Events.on,
+      "keydown",
+      A2($Json$Decode.customDecoder,
+      $Html$Events.keyCode,
+      is13),
+      function (_v0) {
+         return function () {
+            return A2($Signal.message,
+            address,
+            value);
+         }();
+      });
+   });
+   var inputStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
+                                                         ,_0: "width"
+                                                         ,_1: "100%"}
+                                                        ,{ctor: "_Tuple2"
+                                                         ,_0: "height"
+                                                         ,_1: "40px"}
+                                                        ,{ctor: "_Tuple2"
+                                                         ,_0: "padding"
+                                                         ,_1: "10px 0"}
+                                                        ,{ctor: "_Tuple2"
+                                                         ,_0: "font-size"
+                                                         ,_1: "2em"}
+                                                        ,{ctor: "_Tuple2"
+                                                         ,_0: "text-align"
+                                                         ,_1: "center"}]));
+   _op["=>"] = F2(function (v0,
+   v1) {
+      return {ctor: "_Tuple2"
+             ,_0: v0
+             ,_1: v1};
+   });
+   var SubMsg = F2(function (a,b) {
+      return {ctor: "SubMsg"
+             ,_0: a
+             ,_1: b};
+   });
+   var elementView = F2(function (address,
+   _v2) {
+      return function () {
+         switch (_v2.ctor)
+         {case "_Tuple2":
+            return A2($RandomGif.view,
+              A2($Signal.forwardTo,
+              address,
+              SubMsg(_v2._0)),
+              _v2._1);}
+         _U.badCase($moduleName,
+         "on line 96, column 3 to 62");
+      }();
+   });
+   var Create = {ctor: "Create"};
+   var Topic = function (a) {
+      return {ctor: "Topic",_0: a};
+   };
+   var view = F2(function (address,
+   model) {
+      return A2($Html.div,
+      _L.fromArray([]),
+      _L.fromArray([A2($Html.input,
+                   _L.fromArray([$Html$Attributes.placeholder("What kind of gifs do you want?")
+                                ,$Html$Attributes.value(model.topic)
+                                ,A2(onEnter,address,Create)
+                                ,A3($Html$Events.on,
+                                "input",
+                                $Html$Events.targetValue,
+                                function ($) {
+                                   return $Signal.message(address)(Topic($));
+                                })
+                                ,inputStyle]),
+                   _L.fromArray([]))
+                   ,A2($Html.div,
+                   _L.fromArray([$Html$Attributes.style(_L.fromArray([A2(_op["=>"],
+                                                                     "display",
+                                                                     "flex")
+                                                                     ,A2(_op["=>"],
+                                                                     "flex-wrap",
+                                                                     "wrap")]))]),
+                   A2($List.map,
+                   elementView(address),
+                   model.gifList))]));
+   });
+   var Model = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,gifList: b
+             ,topic: a
+             ,uid: c};
+   });
+   var init = {ctor: "_Tuple2"
+              ,_0: A3(Model,
+              "",
+              _L.fromArray([]),
+              0)
+              ,_1: $Effects.none};
+   var update = F2(function (message,
+   model) {
+      return function () {
+         switch (message.ctor)
+         {case "Create":
+            return function () {
+                 var $ = $RandomGif.init(model.topic),
+                 newRandomGif = $._0,
+                 fx = $._1;
+                 var newModel = A3(Model,
+                 "",
+                 A2($Basics._op["++"],
+                 model.gifList,
+                 _L.fromArray([{ctor: "_Tuple2"
+                               ,_0: model.uid
+                               ,_1: newRandomGif}])),
+                 model.uid + 1);
+                 return {ctor: "_Tuple2"
+                        ,_0: newModel
+                        ,_1: A2($Effects.map,
+                        SubMsg(model.uid),
+                        fx)};
+              }();
+            case "SubMsg":
+            return function () {
+                 var subUpdate = function (_v10) {
+                    return function () {
+                       switch (_v10.ctor)
+                       {case "_Tuple2":
+                          return _U.eq(_v10._0,
+                            message._0) ? function () {
+                               var $ = A2($RandomGif.update,
+                               message._1,
+                               _v10._1),
+                               newRandomGif = $._0,
+                               fx = $._1;
+                               return {ctor: "_Tuple2"
+                                      ,_0: {ctor: "_Tuple2"
+                                           ,_0: _v10._0
+                                           ,_1: newRandomGif}
+                                      ,_1: A2($Effects.map,
+                                      SubMsg(_v10._0),
+                                      fx)};
+                            }() : {ctor: "_Tuple2"
+                                  ,_0: _v10
+                                  ,_1: $Effects.none};}
+                       _U.badCase($moduleName,
+                       "between lines 55 and 63");
+                    }();
+                 };
+                 var $ = $List.unzip($List.map(subUpdate)(model.gifList)),
+                 newGifList = $._0,
+                 fxList = $._1;
+                 return {ctor: "_Tuple2"
+                        ,_0: _U.replace([["gifList"
+                                         ,newGifList]],
+                        model)
+                        ,_1: $Effects.batch(fxList)};
+              }();
+            case "Topic":
+            return {ctor: "_Tuple2"
+                   ,_0: _U.replace([["topic"
+                                    ,message._0]],
+                   model)
+                   ,_1: $Effects.none};}
+         _U.badCase($moduleName,
+         "between lines 34 and 73");
+      }();
+   });
+   _elm.RandomGifList.values = {_op: _op
+                               ,Model: Model
+                               ,init: init
+                               ,Topic: Topic
+                               ,Create: Create
+                               ,SubMsg: SubMsg
+                               ,update: update
+                               ,view: view
+                               ,elementView: elementView
+                               ,inputStyle: inputStyle
+                               ,onEnter: onEnter
+                               ,is13: is13};
+   return _elm.RandomGifList.values;
 };
 Elm.Result = Elm.Result || {};
 Elm.Result.make = function (_elm) {
