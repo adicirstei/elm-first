@@ -1800,6 +1800,324 @@ Elm.Dict.make = function (_elm) {
                       ,fromList: fromList};
    return _elm.Dict.values;
 };
+Elm.Easing = Elm.Easing || {};
+Elm.Easing.make = function (_elm) {
+   "use strict";
+   _elm.Easing = _elm.Easing || {};
+   if (_elm.Easing.values)
+   return _elm.Easing.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Easing",
+   $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Time = Elm.Time.make(_elm);
+   var cycle = F3(function (animation,
+   d,
+   t) {
+      return A2(animation,
+      1,
+      t / d - $Basics.toFloat($Basics.floor(t / d)));
+   });
+   var flip = F2(function (easing,
+   time) {
+      return easing(1 - time);
+   });
+   var retour = F2(function (easing,
+   time) {
+      return _U.cmp(time,
+      0.5) < 0 ? easing(time * 2) : flip(easing)((time - 0.5) * 2);
+   });
+   var invert = F2(function (easing,
+   time) {
+      return 1 - easing(1 - time);
+   });
+   var inOut = F3(function (e1,
+   e2,
+   time) {
+      return _U.cmp(time,
+      0.5) < 0 ? e1(time * 2) / 2 : 0.5 + e2((time - 0.5) * 2) / 2;
+   });
+   var easeInElastic = function (time) {
+      return function () {
+         var t$ = time - 1;
+         var p = 0.3;
+         var s = 7.5e-2;
+         return 0 - Math.pow(2,
+         10 * t$) * $Basics.sin((t$ - s) * (2 * $Basics.pi) / p);
+      }();
+   };
+   var easeOutElastic = invert(easeInElastic);
+   var easeInOutElastic = A2(inOut,
+   easeInElastic,
+   easeOutElastic);
+   var easeOutBounce = function (time) {
+      return function () {
+         var t4 = time - 2.65 / 2.75;
+         var t3 = time - 2.25 / 2.75;
+         var t2 = time - 1.5 / 2.75;
+         var a = 7.5625;
+         return _U.cmp(time,
+         1 / 2.75) < 0 ? a * time * time : _U.cmp(time,
+         2 / 2.75) < 0 ? a * t2 * t2 + 0.75 : _U.cmp(time,
+         2.5 / 2.75) < 0 ? a * t3 * t3 + 0.9375 : a * t4 * t4 + 0.984375;
+      }();
+   };
+   var easeInBounce = invert(easeOutBounce);
+   var easeInOutBounce = A2(inOut,
+   easeInBounce,
+   easeOutBounce);
+   var easeInBack = function (time) {
+      return time * time * (2.70158 * time - 1.70158);
+   };
+   var easeOutBack = invert(easeInBack);
+   var easeInOutBack = A2(inOut,
+   easeInBack,
+   easeOutBack);
+   var easeOutCirc = function (time) {
+      return $Basics.sqrt(1 - Math.pow(time - 1,
+      2));
+   };
+   var easeInCirc = invert(easeOutCirc);
+   var easeInOutCirc = A2(inOut,
+   easeInCirc,
+   easeOutCirc);
+   var easeInExpo = function (time) {
+      return Math.pow(2,
+      10 * (time - 1));
+   };
+   var easeOutExpo = invert(easeInExpo);
+   var easeInOutExpo = A2(inOut,
+   easeInExpo,
+   easeOutExpo);
+   var easeOutSine = function (time) {
+      return $Basics.sin(time * ($Basics.pi / 2));
+   };
+   var easeInSine = invert(easeOutSine);
+   var easeInOutSine = A2(inOut,
+   easeInSine,
+   easeOutSine);
+   var easeInQuint = function (time) {
+      return Math.pow(time,5);
+   };
+   var easeOutQuint = invert(easeInQuint);
+   var easeInOutQuint = A2(inOut,
+   easeInQuint,
+   easeOutQuint);
+   var easeInQuart = function (time) {
+      return Math.pow(time,4);
+   };
+   var easeOutQuart = invert(easeInQuart);
+   var easeInOutQuart = A2(inOut,
+   easeInQuart,
+   easeOutQuart);
+   var easeInCubic = function (time) {
+      return Math.pow(time,3);
+   };
+   var easeOutCubic = invert(easeInCubic);
+   var easeInOutCubic = A2(inOut,
+   easeInCubic,
+   easeOutCubic);
+   var easeInQuad = function (time) {
+      return Math.pow(time,2);
+   };
+   var easeOutQuad = invert(easeInQuad);
+   var easeInOutQuad = A2(inOut,
+   easeInQuad,
+   easeOutQuad);
+   var linear = $Basics.identity;
+   var pair = F4(function (interpolate,
+   _v0,
+   _v1,
+   v) {
+      return function () {
+         switch (_v1.ctor)
+         {case "_Tuple2":
+            return function () {
+                 switch (_v0.ctor)
+                 {case "_Tuple2":
+                    return {ctor: "_Tuple2"
+                           ,_0: A3(interpolate,
+                           _v0._0,
+                           _v1._0,
+                           v)
+                           ,_1: A3(interpolate,
+                           _v0._1,
+                           _v1._1,
+                           v)};}
+                 _U.badCase($moduleName,
+                 "on line 150, column 6 to 46");
+              }();}
+         _U.badCase($moduleName,
+         "on line 150, column 6 to 46");
+      }();
+   });
+   var $float = F3(function (from,
+   to,
+   v) {
+      return from + (to - from) * v;
+   });
+   var point2d = F3(function (from,
+   to,
+   v) {
+      return {_: {}
+             ,x: A3($float,from.x,to.x,v)
+             ,y: A3($float,from.y,to.y,v)};
+   });
+   var point3d = F3(function (from,
+   to,
+   v) {
+      return {_: {}
+             ,x: A3($float,from.x,to.x,v)
+             ,y: A3($float,from.y,to.y,v)
+             ,z: A3($float,from.z,to.z,v)};
+   });
+   var color = F3(function (from,
+   to,
+   v) {
+      return function () {
+         var float$ = F3(function (from,
+         to,
+         v) {
+            return $Basics.round(A3($float,
+            $Basics.toFloat(from),
+            $Basics.toFloat(to),
+            v));
+         });
+         var $ = {ctor: "_Tuple2"
+                 ,_0: $Color.toRgb(from)
+                 ,_1: $Color.toRgb(to)},
+         rgb1 = $._0,
+         rgb2 = $._1;
+         var $ = {ctor: "_Tuple4"
+                 ,_0: rgb1.red
+                 ,_1: rgb1.green
+                 ,_2: rgb1.blue
+                 ,_3: rgb1.alpha},
+         r1 = $._0,
+         g1 = $._1,
+         b1 = $._2,
+         a1 = $._3;
+         var $ = {ctor: "_Tuple4"
+                 ,_0: rgb2.red
+                 ,_1: rgb2.green
+                 ,_2: rgb2.blue
+                 ,_3: rgb2.alpha},
+         r2 = $._0,
+         g2 = $._1,
+         b2 = $._2,
+         a2 = $._3;
+         return A4($Color.rgba,
+         A3(float$,r1,r2,v),
+         A3(float$,g1,g2,v),
+         A3(float$,b1,b2,v),
+         A3($float,a1,a2,v));
+      }();
+   });
+   var bezier = F5(function (x1,
+   y1,
+   x2,
+   y2,
+   time) {
+      return function () {
+         var casteljau = function (ps) {
+            return function () {
+               switch (ps.ctor)
+               {case "::": switch (ps._0.ctor)
+                    {case "_Tuple2":
+                       switch (ps._1.ctor)
+                         {case "[]": return ps._0._1;}
+                         break;}
+                    break;}
+               return casteljau(A3($List.map2,
+               F2(function (x,y) {
+                  return A4(pair,
+                  $float,
+                  x,
+                  y,
+                  time);
+               }),
+               ps,
+               A2($Maybe.withDefault,
+               _L.fromArray([]),
+               $List.tail(ps))));
+            }();
+         };
+         return casteljau(_L.fromArray([{ctor: "_Tuple2"
+                                        ,_0: 0
+                                        ,_1: 0}
+                                       ,{ctor: "_Tuple2",_0: x1,_1: y1}
+                                       ,{ctor: "_Tuple2",_0: x2,_1: y2}
+                                       ,{ctor: "_Tuple2"
+                                        ,_0: 1
+                                        ,_1: 1}]));
+      }();
+   });
+   var ease = F6(function (easing,
+   interpolation,
+   from,
+   to,
+   duration,
+   time) {
+      return A3(interpolation,
+      from,
+      to,
+      easing(A2($Basics.min,
+      time / duration,
+      1)));
+   });
+   _elm.Easing.values = {_op: _op
+                        ,ease: ease
+                        ,$float: $float
+                        ,point2d: point2d
+                        ,point3d: point3d
+                        ,color: color
+                        ,pair: pair
+                        ,cycle: cycle
+                        ,invert: invert
+                        ,retour: retour
+                        ,inOut: inOut
+                        ,flip: flip
+                        ,bezier: bezier
+                        ,linear: linear
+                        ,easeInQuad: easeInQuad
+                        ,easeOutQuad: easeOutQuad
+                        ,easeInOutQuad: easeInOutQuad
+                        ,easeInCubic: easeInCubic
+                        ,easeOutCubic: easeOutCubic
+                        ,easeInOutCubic: easeInOutCubic
+                        ,easeInQuart: easeInQuart
+                        ,easeOutQuart: easeOutQuart
+                        ,easeInOutQuart: easeInOutQuart
+                        ,easeInQuint: easeInQuint
+                        ,easeOutQuint: easeOutQuint
+                        ,easeInOutQuint: easeInOutQuint
+                        ,easeInSine: easeInSine
+                        ,easeOutSine: easeOutSine
+                        ,easeInOutSine: easeInOutSine
+                        ,easeInExpo: easeInExpo
+                        ,easeOutExpo: easeOutExpo
+                        ,easeInOutExpo: easeInOutExpo
+                        ,easeInCirc: easeInCirc
+                        ,easeOutCirc: easeOutCirc
+                        ,easeInOutCirc: easeInOutCirc
+                        ,easeInBack: easeInBack
+                        ,easeOutBack: easeOutBack
+                        ,easeInOutBack: easeInOutBack
+                        ,easeInBounce: easeInBounce
+                        ,easeOutBounce: easeOutBounce
+                        ,easeInOutBounce: easeInOutBounce
+                        ,easeInElastic: easeInElastic
+                        ,easeOutElastic: easeOutElastic
+                        ,easeInOutElastic: easeInOutElastic};
+   return _elm.Easing.values;
+};
 Elm.Effects = Elm.Effects || {};
 Elm.Effects.make = function (_elm) {
    "use strict";
@@ -3676,400 +3994,6 @@ Elm.Html.Attributes.make = function (_elm) {
                                  ,attribute: attribute};
    return _elm.Html.Attributes.values;
 };
-Elm.Html = Elm.Html || {};
-Elm.Html.Events = Elm.Html.Events || {};
-Elm.Html.Events.make = function (_elm) {
-   "use strict";
-   _elm.Html = _elm.Html || {};
-   _elm.Html.Events = _elm.Html.Events || {};
-   if (_elm.Html.Events.values)
-   return _elm.Html.Events.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   $moduleName = "Html.Events",
-   $Basics = Elm.Basics.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $VirtualDom = Elm.VirtualDom.make(_elm);
-   var keyCode = A2($Json$Decode._op[":="],
-   "keyCode",
-   $Json$Decode.$int);
-   var targetChecked = A2($Json$Decode.at,
-   _L.fromArray(["target"
-                ,"checked"]),
-   $Json$Decode.bool);
-   var targetValue = A2($Json$Decode.at,
-   _L.fromArray(["target"
-                ,"value"]),
-   $Json$Decode.string);
-   var defaultOptions = $VirtualDom.defaultOptions;
-   var Options = F2(function (a,
-   b) {
-      return {_: {}
-             ,preventDefault: b
-             ,stopPropagation: a};
-   });
-   var onWithOptions = $VirtualDom.onWithOptions;
-   var on = $VirtualDom.on;
-   var messageOn = F3(function (name,
-   addr,
-   msg) {
-      return A3(on,
-      name,
-      $Json$Decode.value,
-      function (_v0) {
-         return function () {
-            return A2($Signal.message,
-            addr,
-            msg);
-         }();
-      });
-   });
-   var onClick = messageOn("click");
-   var onDoubleClick = messageOn("dblclick");
-   var onMouseMove = messageOn("mousemove");
-   var onMouseDown = messageOn("mousedown");
-   var onMouseUp = messageOn("mouseup");
-   var onMouseEnter = messageOn("mouseenter");
-   var onMouseLeave = messageOn("mouseleave");
-   var onMouseOver = messageOn("mouseover");
-   var onMouseOut = messageOn("mouseout");
-   var onBlur = messageOn("blur");
-   var onFocus = messageOn("focus");
-   var onSubmit = messageOn("submit");
-   var onKey = F3(function (name,
-   addr,
-   handler) {
-      return A3(on,
-      name,
-      keyCode,
-      function (code) {
-         return A2($Signal.message,
-         addr,
-         handler(code));
-      });
-   });
-   var onKeyUp = onKey("keyup");
-   var onKeyDown = onKey("keydown");
-   var onKeyPress = onKey("keypress");
-   _elm.Html.Events.values = {_op: _op
-                             ,onBlur: onBlur
-                             ,onFocus: onFocus
-                             ,onSubmit: onSubmit
-                             ,onKeyUp: onKeyUp
-                             ,onKeyDown: onKeyDown
-                             ,onKeyPress: onKeyPress
-                             ,onClick: onClick
-                             ,onDoubleClick: onDoubleClick
-                             ,onMouseMove: onMouseMove
-                             ,onMouseDown: onMouseDown
-                             ,onMouseUp: onMouseUp
-                             ,onMouseEnter: onMouseEnter
-                             ,onMouseLeave: onMouseLeave
-                             ,onMouseOver: onMouseOver
-                             ,onMouseOut: onMouseOut
-                             ,on: on
-                             ,onWithOptions: onWithOptions
-                             ,defaultOptions: defaultOptions
-                             ,targetValue: targetValue
-                             ,targetChecked: targetChecked
-                             ,keyCode: keyCode
-                             ,Options: Options};
-   return _elm.Html.Events.values;
-};
-Elm.Http = Elm.Http || {};
-Elm.Http.make = function (_elm) {
-   "use strict";
-   _elm.Http = _elm.Http || {};
-   if (_elm.Http.values)
-   return _elm.Http.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   $moduleName = "Http",
-   $Basics = Elm.Basics.make(_elm),
-   $Dict = Elm.Dict.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Native$Http = Elm.Native.Http.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm),
-   $Task = Elm.Task.make(_elm),
-   $Time = Elm.Time.make(_elm);
-   var send = $Native$Http.send;
-   var BadResponse = F2(function (a,
-   b) {
-      return {ctor: "BadResponse"
-             ,_0: a
-             ,_1: b};
-   });
-   var UnexpectedPayload = function (a) {
-      return {ctor: "UnexpectedPayload"
-             ,_0: a};
-   };
-   var handleResponse = F2(function (handle,
-   response) {
-      return function () {
-         var _v0 = _U.cmp(200,
-         response.status) < 1 && _U.cmp(response.status,
-         300) < 0;
-         switch (_v0)
-         {case false:
-            return $Task.fail(A2(BadResponse,
-              response.status,
-              response.statusText));
-            case true: return function () {
-                 var _v1 = response.value;
-                 switch (_v1.ctor)
-                 {case "Text":
-                    return handle(_v1._0);}
-                 return $Task.fail(UnexpectedPayload("Response body is a blob, expecting a string."));
-              }();}
-         _U.badCase($moduleName,
-         "between lines 430 and 437");
-      }();
-   });
-   var NetworkError = {ctor: "NetworkError"};
-   var Timeout = {ctor: "Timeout"};
-   var promoteError = function (rawError) {
-      return function () {
-         switch (rawError.ctor)
-         {case "RawNetworkError":
-            return NetworkError;
-            case "RawTimeout":
-            return Timeout;}
-         _U.badCase($moduleName,
-         "between lines 442 and 444");
-      }();
-   };
-   var fromJson = F2(function (decoder,
-   response) {
-      return function () {
-         var decode = function (str) {
-            return function () {
-               var _v4 = A2($Json$Decode.decodeString,
-               decoder,
-               str);
-               switch (_v4.ctor)
-               {case "Err":
-                  return $Task.fail(UnexpectedPayload(_v4._0));
-                  case "Ok":
-                  return $Task.succeed(_v4._0);}
-               _U.badCase($moduleName,
-               "between lines 420 and 423");
-            }();
-         };
-         return A2($Task.andThen,
-         A2($Task.mapError,
-         promoteError,
-         response),
-         handleResponse(decode));
-      }();
-   });
-   var RawNetworkError = {ctor: "RawNetworkError"};
-   var RawTimeout = {ctor: "RawTimeout"};
-   var Blob = function (a) {
-      return {ctor: "Blob",_0: a};
-   };
-   var Text = function (a) {
-      return {ctor: "Text",_0: a};
-   };
-   var Response = F5(function (a,
-   b,
-   c,
-   d,
-   e) {
-      return {_: {}
-             ,headers: c
-             ,status: a
-             ,statusText: b
-             ,url: d
-             ,value: e};
-   });
-   var defaultSettings = {_: {}
-                         ,desiredResponseType: $Maybe.Nothing
-                         ,onProgress: $Maybe.Nothing
-                         ,onStart: $Maybe.Nothing
-                         ,timeout: 0};
-   var post = F3(function (decoder,
-   url,
-   body) {
-      return function () {
-         var request = {_: {}
-                       ,body: body
-                       ,headers: _L.fromArray([])
-                       ,url: url
-                       ,verb: "POST"};
-         return A2(fromJson,
-         decoder,
-         A2(send,
-         defaultSettings,
-         request));
-      }();
-   });
-   var Settings = F4(function (a,
-   b,
-   c,
-   d) {
-      return {_: {}
-             ,desiredResponseType: d
-             ,onProgress: c
-             ,onStart: b
-             ,timeout: a};
-   });
-   var multipart = $Native$Http.multipart;
-   var FileData = F3(function (a,
-   b,
-   c) {
-      return {ctor: "FileData"
-             ,_0: a
-             ,_1: b
-             ,_2: c};
-   });
-   var BlobData = F3(function (a,
-   b,
-   c) {
-      return {ctor: "BlobData"
-             ,_0: a
-             ,_1: b
-             ,_2: c};
-   });
-   var blobData = BlobData;
-   var StringData = F2(function (a,
-   b) {
-      return {ctor: "StringData"
-             ,_0: a
-             ,_1: b};
-   });
-   var stringData = StringData;
-   var BodyBlob = function (a) {
-      return {ctor: "BodyBlob"
-             ,_0: a};
-   };
-   var BodyFormData = {ctor: "BodyFormData"};
-   var ArrayBuffer = {ctor: "ArrayBuffer"};
-   var BodyString = function (a) {
-      return {ctor: "BodyString"
-             ,_0: a};
-   };
-   var string = BodyString;
-   var Empty = {ctor: "Empty"};
-   var empty = Empty;
-   var getString = function (url) {
-      return function () {
-         var request = {_: {}
-                       ,body: empty
-                       ,headers: _L.fromArray([])
-                       ,url: url
-                       ,verb: "GET"};
-         return A2($Task.andThen,
-         A2($Task.mapError,
-         promoteError,
-         A2(send,
-         defaultSettings,
-         request)),
-         handleResponse($Task.succeed));
-      }();
-   };
-   var get = F2(function (decoder,
-   url) {
-      return function () {
-         var request = {_: {}
-                       ,body: empty
-                       ,headers: _L.fromArray([])
-                       ,url: url
-                       ,verb: "GET"};
-         return A2(fromJson,
-         decoder,
-         A2(send,
-         defaultSettings,
-         request));
-      }();
-   });
-   var Request = F4(function (a,
-   b,
-   c,
-   d) {
-      return {_: {}
-             ,body: d
-             ,headers: b
-             ,url: c
-             ,verb: a};
-   });
-   var uriDecode = $Native$Http.uriDecode;
-   var uriEncode = $Native$Http.uriEncode;
-   var queryEscape = function (string) {
-      return A2($String.join,
-      "+",
-      A2($String.split,
-      "%20",
-      uriEncode(string)));
-   };
-   var queryPair = function (_v7) {
-      return function () {
-         switch (_v7.ctor)
-         {case "_Tuple2":
-            return A2($Basics._op["++"],
-              queryEscape(_v7._0),
-              A2($Basics._op["++"],
-              "=",
-              queryEscape(_v7._1)));}
-         _U.badCase($moduleName,
-         "on line 67, column 3 to 46");
-      }();
-   };
-   var url = F2(function (baseUrl,
-   args) {
-      return function () {
-         switch (args.ctor)
-         {case "[]": return baseUrl;}
-         return A2($Basics._op["++"],
-         baseUrl,
-         A2($Basics._op["++"],
-         "?",
-         A2($String.join,
-         "&",
-         A2($List.map,queryPair,args))));
-      }();
-   });
-   var TODO_implement_file_in_another_library = {ctor: "TODO_implement_file_in_another_library"};
-   var TODO_implement_blob_in_another_library = {ctor: "TODO_implement_blob_in_another_library"};
-   _elm.Http.values = {_op: _op
-                      ,getString: getString
-                      ,get: get
-                      ,post: post
-                      ,send: send
-                      ,url: url
-                      ,uriEncode: uriEncode
-                      ,uriDecode: uriDecode
-                      ,empty: empty
-                      ,string: string
-                      ,multipart: multipart
-                      ,stringData: stringData
-                      ,defaultSettings: defaultSettings
-                      ,fromJson: fromJson
-                      ,Request: Request
-                      ,Settings: Settings
-                      ,Response: Response
-                      ,Text: Text
-                      ,Blob: Blob
-                      ,Timeout: Timeout
-                      ,NetworkError: NetworkError
-                      ,UnexpectedPayload: UnexpectedPayload
-                      ,BadResponse: BadResponse
-                      ,RawTimeout: RawTimeout
-                      ,RawNetworkError: RawNetworkError};
-   return _elm.Http.values;
-};
 Elm.Json = Elm.Json || {};
 Elm.Json.Decode = Elm.Json.Decode || {};
 Elm.Json.Decode.make = function (_elm) {
@@ -4588,16 +4512,16 @@ Elm.Main.make = function (_elm) {
    $Effects = Elm.Effects.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $RandomGifList = Elm.RandomGifList.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $SpinSquarePair = Elm.SpinSquarePair.make(_elm),
    $StartApp = Elm.StartApp.make(_elm),
    $Task = Elm.Task.make(_elm);
    var app = $StartApp.start({_: {}
-                             ,init: $RandomGifList.init
+                             ,init: $SpinSquarePair.init
                              ,inputs: _L.fromArray([])
-                             ,update: $RandomGifList.update
-                             ,view: $RandomGifList.view});
+                             ,update: $SpinSquarePair.update
+                             ,view: $SpinSquarePair.view});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",
    app.tasks);
@@ -7444,185 +7368,6 @@ Elm.Native.Graphics.Element.make = function(localRuntime) {
 		markdown: markdown
 	};
 
-};
-
-Elm.Native.Http = {};
-Elm.Native.Http.make = function(localRuntime) {
-
-	localRuntime.Native = localRuntime.Native || {};
-	localRuntime.Native.Http = localRuntime.Native.Http || {};
-	if (localRuntime.Native.Http.values)
-	{
-		return localRuntime.Native.Http.values;
-	}
-
-	var Dict = Elm.Dict.make(localRuntime);
-	var List = Elm.List.make(localRuntime);
-	var Maybe = Elm.Maybe.make(localRuntime);
-	var Task = Elm.Native.Task.make(localRuntime);
-
-
-	function send(settings, request)
-	{
-		return Task.asyncFunction(function(callback) {
-			var req = new XMLHttpRequest();
-
-			// start
-			if (settings.onStart.ctor === 'Just')
-			{
-				req.addEventListener('loadStart', function() {
-					var task = settings.onStart._0;
-					Task.spawn(task);
-				});
-			}
-
-			// progress
-			if (settings.onProgress.ctor === 'Just')
-			{
-				req.addEventListener('progress', function(event) {
-					var progress = !event.lengthComputable
-						? Maybe.Nothing
-						: Maybe.Just({
-							_: {},
-							loaded: event.loaded,
-							total: event.total
-						});
-					var task = settings.onProgress._0(progress);
-					Task.spawn(task);
-				});
-			}
-
-			// end
-			req.addEventListener('error', function() {
-				return callback(Task.fail({ ctor: 'RawNetworkError' }));
-			});
-
-			req.addEventListener('timeout', function() {
-				return callback(Task.fail({ ctor: 'RawTimeout' }));
-			});
-
-			req.addEventListener('load', function() {
-				return callback(Task.succeed(toResponse(req)));
-			});
-
-			req.open(request.verb, request.url, true);
-
-			// set all the headers
-			function setHeader(pair) {
-				req.setRequestHeader(pair._0, pair._1);
-			}
-			A2(List.map, setHeader, request.headers);
-
-			// set the timeout
-			req.timeout = settings.timeout;
-
-			// ask for a specific MIME type for the response
-			if (settings.desiredResponseType.ctor === 'Just')
-			{
-				req.overrideMimeType(settings.desiredResponseType._0);
-			}
-                    if(request.body.ctor === "BodyFormData")
-                    {
-                        req.send(request.body.formData)
-                    }
-                    else {
-                        req.send(request.body._0);
-                    }
-		});
-	}
-
-
-	// deal with responses
-
-	function toResponse(req)
-	{
-		var tag = req.responseType === 'blob' ? 'Blob' : 'Text'
-		var response = tag === 'Blob' ? req.response : req.responseText;
-		return {
-			_: {},
-			status: req.status,
-			statusText: req.statusText,
-			headers: parseHeaders(req.getAllResponseHeaders()),
-			url: req.responseURL,
-			value: { ctor: tag, _0: response }
-		};
-	}
-
-
-	function parseHeaders(rawHeaders)
-	{
-		var headers = Dict.empty;
-
-		if (!rawHeaders)
-		{
-			return headers;
-		}
-
-		var headerPairs = rawHeaders.split('\u000d\u000a');
-		for (var i = headerPairs.length; i--; )
-		{
-			var headerPair = headerPairs[i];
-			var index = headerPair.indexOf('\u003a\u0020');
-			if (index > 0)
-			{
-				var key = headerPair.substring(0, index);
-				var value = headerPair.substring(index + 2);
-
-				headers = A3(Dict.update, key, function(oldValue) {
-					if (oldValue.ctor === 'Just')
-					{
-						return Maybe.Just(value + ', ' + oldValue._0);
-					}
-					return Maybe.Just(value);
-				}, headers);
-			}
-		}
-
-		return headers;
-	}
-
-
-	function multipart(dataList)
-	{
-		var formData = new FormData();
-
-		while (dataList.ctor !== '[]')
-		{
-			var data = dataList._0;
-			if (data.ctor === 'StringData')
-			{
-				formData.append(data._0, data._1);
-			}
-			else
-			{
-				var fileName = data._1.ctor === 'Nothing'
-					? undefined
-					: data._1._0;
-				formData.append(data._0, data._2, fileName);
-			}
-			dataList = dataList._1;
-		}
-
-		return { ctor: 'BodyFormData', formData: formData };
-	}
-
-
-	function uriEncode(string)
-	{
-		return encodeURIComponent(string);
-	}
-
-	function uriDecode(string)
-	{
-		return decodeURIComponent(string);
-	}
-
-	return localRuntime.Native.Http.values = {
-		send: F2(send),
-		multipart: multipart,
-		uriEncode: uriEncode,
-		uriDecode: uriDecode
-	};
 };
 
 Elm.Native.Json = {};
@@ -12813,356 +12558,6 @@ Elm.Native.VirtualDom.make = function(elm)
 
 },{"virtual-dom/vdom/create-element":6,"virtual-dom/vdom/patch":9,"virtual-dom/vnode/is-vhook":13,"virtual-dom/vnode/vnode":18,"virtual-dom/vnode/vtext":20,"virtual-dom/vtree/diff":22}]},{},[23]);
 
-Elm.RandomGif = Elm.RandomGif || {};
-Elm.RandomGif.make = function (_elm) {
-   "use strict";
-   _elm.RandomGif = _elm.RandomGif || {};
-   if (_elm.RandomGif.values)
-   return _elm.RandomGif.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   $moduleName = "RandomGif",
-   $Basics = Elm.Basics.make(_elm),
-   $Effects = Elm.Effects.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $Http = Elm.Http.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Task = Elm.Task.make(_elm);
-   var decodeImageUrl = A2($Json$Decode.at,
-   _L.fromArray(["data"
-                ,"image_url"]),
-   $Json$Decode.string);
-   _op["=>"] = F2(function (v0,
-   v1) {
-      return {ctor: "_Tuple2"
-             ,_0: v0
-             ,_1: v1};
-   });
-   var headerStyle = $Html$Attributes.style(_L.fromArray([A2(_op["=>"],
-                                                         "width",
-                                                         "200px")
-                                                         ,A2(_op["=>"],
-                                                         "text-align",
-                                                         "center")]));
-   var imgStyle = function (url) {
-      return $Html$Attributes.style(_L.fromArray([A2(_op["=>"],
-                                                 "display",
-                                                 "inline-block")
-                                                 ,A2(_op["=>"],"width","200px")
-                                                 ,A2(_op["=>"],"height","200px")
-                                                 ,A2(_op["=>"],
-                                                 "background-position",
-                                                 "center center")
-                                                 ,A2(_op["=>"],
-                                                 "background-size",
-                                                 "cover")
-                                                 ,A2(_op["=>"],
-                                                 "background-image",
-                                                 A2($Basics._op["++"],
-                                                 "url(\'",
-                                                 A2($Basics._op["++"],
-                                                 url,
-                                                 "\')")))]));
-   };
-   var randomUrl = function (topic) {
-      return A2($Http.url,
-      "http://api.giphy.com/v1/gifs/random",
-      _L.fromArray([A2(_op["=>"],
-                   "api_key",
-                   "dc6zaTOxFJmzC")
-                   ,A2(_op["=>"],"tag",topic)]));
-   };
-   var NewGif = function (a) {
-      return {ctor: "NewGif"
-             ,_0: a};
-   };
-   var getRandomGif = function (topic) {
-      return $Effects.task($Task.map(NewGif)($Task.toMaybe(A2($Http.get,
-      decodeImageUrl,
-      randomUrl(topic)))));
-   };
-   var RequestMore = {ctor: "RequestMore"};
-   var view = F2(function (address,
-   model) {
-      return A2($Html.div,
-      _L.fromArray([$Html$Attributes.style(_L.fromArray([A2(_op["=>"],
-      "width",
-      "200px")]))]),
-      _L.fromArray([A2($Html.h2,
-                   _L.fromArray([headerStyle]),
-                   _L.fromArray([$Html.text(model.topic)]))
-                   ,A2($Html.div,
-                   _L.fromArray([imgStyle(model.gifUrl)]),
-                   _L.fromArray([]))
-                   ,A2($Html.button,
-                   _L.fromArray([A2($Html$Events.onClick,
-                   address,
-                   RequestMore)]),
-                   _L.fromArray([$Html.text("More Please!")]))]));
-   });
-   var Model = F2(function (a,b) {
-      return {_: {}
-             ,gifUrl: b
-             ,topic: a};
-   });
-   var init = function (topic) {
-      return {ctor: "_Tuple2"
-             ,_0: A2(Model,
-             topic,
-             "assets/waiting.gif")
-             ,_1: getRandomGif(topic)};
-   };
-   var update = F2(function (action,
-   model) {
-      return function () {
-         switch (action.ctor)
-         {case "NewGif":
-            return {ctor: "_Tuple2"
-                   ,_0: A2(Model,
-                   model.topic,
-                   A2($Maybe.withDefault,
-                   model.gifUrl,
-                   action._0))
-                   ,_1: $Effects.none};
-            case "RequestMore":
-            return {ctor: "_Tuple2"
-                   ,_0: model
-                   ,_1: getRandomGif(model.topic)};}
-         _U.badCase($moduleName,
-         "between lines 29 and 36");
-      }();
-   });
-   _elm.RandomGif.values = {_op: _op
-                           ,Model: Model
-                           ,init: init
-                           ,RequestMore: RequestMore
-                           ,NewGif: NewGif
-                           ,update: update
-                           ,view: view
-                           ,headerStyle: headerStyle
-                           ,imgStyle: imgStyle
-                           ,getRandomGif: getRandomGif
-                           ,randomUrl: randomUrl
-                           ,decodeImageUrl: decodeImageUrl};
-   return _elm.RandomGif.values;
-};
-Elm.RandomGifList = Elm.RandomGifList || {};
-Elm.RandomGifList.make = function (_elm) {
-   "use strict";
-   _elm.RandomGifList = _elm.RandomGifList || {};
-   if (_elm.RandomGifList.values)
-   return _elm.RandomGifList.values;
-   var _op = {},
-   _N = Elm.Native,
-   _U = _N.Utils.make(_elm),
-   _L = _N.List.make(_elm),
-   $moduleName = "RandomGifList",
-   $Basics = Elm.Basics.make(_elm),
-   $Effects = Elm.Effects.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $RandomGif = Elm.RandomGif.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var is13 = function (code) {
-      return _U.eq(code,
-      13) ? $Result.Ok({ctor: "_Tuple0"}) : $Result.Err("not the right code");
-   };
-   var onEnter = F2(function (address,
-   value) {
-      return A3($Html$Events.on,
-      "keydown",
-      A2($Json$Decode.customDecoder,
-      $Html$Events.keyCode,
-      is13),
-      function (_v0) {
-         return function () {
-            return A2($Signal.message,
-            address,
-            value);
-         }();
-      });
-   });
-   var inputStyle = $Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
-                                                         ,_0: "width"
-                                                         ,_1: "100%"}
-                                                        ,{ctor: "_Tuple2"
-                                                         ,_0: "height"
-                                                         ,_1: "40px"}
-                                                        ,{ctor: "_Tuple2"
-                                                         ,_0: "padding"
-                                                         ,_1: "10px 0"}
-                                                        ,{ctor: "_Tuple2"
-                                                         ,_0: "font-size"
-                                                         ,_1: "2em"}
-                                                        ,{ctor: "_Tuple2"
-                                                         ,_0: "text-align"
-                                                         ,_1: "center"}]));
-   _op["=>"] = F2(function (v0,
-   v1) {
-      return {ctor: "_Tuple2"
-             ,_0: v0
-             ,_1: v1};
-   });
-   var SubMsg = F2(function (a,b) {
-      return {ctor: "SubMsg"
-             ,_0: a
-             ,_1: b};
-   });
-   var elementView = F2(function (address,
-   _v2) {
-      return function () {
-         switch (_v2.ctor)
-         {case "_Tuple2":
-            return A2($RandomGif.view,
-              A2($Signal.forwardTo,
-              address,
-              SubMsg(_v2._0)),
-              _v2._1);}
-         _U.badCase($moduleName,
-         "on line 96, column 3 to 62");
-      }();
-   });
-   var Create = {ctor: "Create"};
-   var Topic = function (a) {
-      return {ctor: "Topic",_0: a};
-   };
-   var view = F2(function (address,
-   model) {
-      return A2($Html.div,
-      _L.fromArray([]),
-      _L.fromArray([A2($Html.input,
-                   _L.fromArray([$Html$Attributes.placeholder("What kind of gifs do you want?")
-                                ,$Html$Attributes.value(model.topic)
-                                ,A2(onEnter,address,Create)
-                                ,A3($Html$Events.on,
-                                "input",
-                                $Html$Events.targetValue,
-                                function ($) {
-                                   return $Signal.message(address)(Topic($));
-                                })
-                                ,inputStyle]),
-                   _L.fromArray([]))
-                   ,A2($Html.div,
-                   _L.fromArray([$Html$Attributes.style(_L.fromArray([A2(_op["=>"],
-                                                                     "display",
-                                                                     "flex")
-                                                                     ,A2(_op["=>"],
-                                                                     "flex-wrap",
-                                                                     "wrap")]))]),
-                   A2($List.map,
-                   elementView(address),
-                   model.gifList))]));
-   });
-   var Model = F3(function (a,
-   b,
-   c) {
-      return {_: {}
-             ,gifList: b
-             ,topic: a
-             ,uid: c};
-   });
-   var init = {ctor: "_Tuple2"
-              ,_0: A3(Model,
-              "",
-              _L.fromArray([]),
-              0)
-              ,_1: $Effects.none};
-   var update = F2(function (message,
-   model) {
-      return function () {
-         switch (message.ctor)
-         {case "Create":
-            return function () {
-                 var $ = $RandomGif.init(model.topic),
-                 newRandomGif = $._0,
-                 fx = $._1;
-                 var newModel = A3(Model,
-                 "",
-                 A2($Basics._op["++"],
-                 model.gifList,
-                 _L.fromArray([{ctor: "_Tuple2"
-                               ,_0: model.uid
-                               ,_1: newRandomGif}])),
-                 model.uid + 1);
-                 return {ctor: "_Tuple2"
-                        ,_0: newModel
-                        ,_1: A2($Effects.map,
-                        SubMsg(model.uid),
-                        fx)};
-              }();
-            case "SubMsg":
-            return function () {
-                 var subUpdate = function (_v10) {
-                    return function () {
-                       switch (_v10.ctor)
-                       {case "_Tuple2":
-                          return _U.eq(_v10._0,
-                            message._0) ? function () {
-                               var $ = A2($RandomGif.update,
-                               message._1,
-                               _v10._1),
-                               newRandomGif = $._0,
-                               fx = $._1;
-                               return {ctor: "_Tuple2"
-                                      ,_0: {ctor: "_Tuple2"
-                                           ,_0: _v10._0
-                                           ,_1: newRandomGif}
-                                      ,_1: A2($Effects.map,
-                                      SubMsg(_v10._0),
-                                      fx)};
-                            }() : {ctor: "_Tuple2"
-                                  ,_0: _v10
-                                  ,_1: $Effects.none};}
-                       _U.badCase($moduleName,
-                       "between lines 55 and 63");
-                    }();
-                 };
-                 var $ = $List.unzip($List.map(subUpdate)(model.gifList)),
-                 newGifList = $._0,
-                 fxList = $._1;
-                 return {ctor: "_Tuple2"
-                        ,_0: _U.replace([["gifList"
-                                         ,newGifList]],
-                        model)
-                        ,_1: $Effects.batch(fxList)};
-              }();
-            case "Topic":
-            return {ctor: "_Tuple2"
-                   ,_0: _U.replace([["topic"
-                                    ,message._0]],
-                   model)
-                   ,_1: $Effects.none};}
-         _U.badCase($moduleName,
-         "between lines 34 and 73");
-      }();
-   });
-   _elm.RandomGifList.values = {_op: _op
-                               ,Model: Model
-                               ,init: init
-                               ,Topic: Topic
-                               ,Create: Create
-                               ,SubMsg: SubMsg
-                               ,update: update
-                               ,view: view
-                               ,elementView: elementView
-                               ,inputStyle: inputStyle
-                               ,onEnter: onEnter
-                               ,is13: is13};
-   return _elm.RandomGifList.values;
-};
 Elm.Result = Elm.Result || {};
 Elm.Result.make = function (_elm) {
    "use strict";
@@ -13551,6 +12946,256 @@ Elm.Signal.make = function (_elm) {
                         ,Mailbox: Mailbox};
    return _elm.Signal.values;
 };
+Elm.SpinSquare = Elm.SpinSquare || {};
+Elm.SpinSquare.make = function (_elm) {
+   "use strict";
+   _elm.SpinSquare = _elm.SpinSquare || {};
+   if (_elm.SpinSquare.values)
+   return _elm.SpinSquare.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "SpinSquare",
+   $Basics = Elm.Basics.make(_elm),
+   $Easing = Elm.Easing.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Svg = Elm.Svg.make(_elm),
+   $Svg$Attributes = Elm.Svg.Attributes.make(_elm),
+   $Svg$Events = Elm.Svg.Events.make(_elm),
+   $Time = Elm.Time.make(_elm);
+   var Tick = function (a) {
+      return {ctor: "Tick",_0: a};
+   };
+   var Spin = {ctor: "Spin"};
+   var duration = $Time.second;
+   var rotateStep = 90;
+   var update = F2(function (msg,
+   model) {
+      return function () {
+         switch (msg.ctor)
+         {case "Spin":
+            return function () {
+                 var _v2 = model.animationState;
+                 switch (_v2.ctor)
+                 {case "Just":
+                    return {ctor: "_Tuple2"
+                           ,_0: model
+                           ,_1: $Effects.none};
+                    case "Nothing":
+                    return {ctor: "_Tuple2"
+                           ,_0: model
+                           ,_1: $Effects.tick(Tick)};}
+                 _U.badCase($moduleName,
+                 "between lines 37 and 44");
+              }();
+            case "Tick":
+            return function () {
+                 var newElapsedTime = function () {
+                    var _v4 = model.animationState;
+                    switch (_v4.ctor)
+                    {case "Just":
+                       return _v4._0.elapsedTime + (msg._0 - _v4._0.prevClockTime);
+                       case "Nothing": return 0;}
+                    _U.badCase($moduleName,
+                    "between lines 47 and 54");
+                 }();
+                 return _U.cmp(newElapsedTime,
+                 duration) > 0 ? {ctor: "_Tuple2"
+                                 ,_0: {_: {}
+                                      ,angle: model.angle + rotateStep
+                                      ,animationState: $Maybe.Nothing}
+                                 ,_1: $Effects.none} : {ctor: "_Tuple2"
+                                                       ,_0: {_: {}
+                                                            ,angle: model.angle
+                                                            ,animationState: $Maybe.Just({_: {}
+                                                                                         ,elapsedTime: newElapsedTime
+                                                                                         ,prevClockTime: msg._0})}
+                                                       ,_1: $Effects.tick(Tick)};
+              }();}
+         _U.badCase($moduleName,
+         "between lines 35 and 66");
+      }();
+   });
+   var toOffset = function (animationState) {
+      return function () {
+         switch (animationState.ctor)
+         {case "Just":
+            return A6($Easing.ease,
+              $Easing.easeOutBounce,
+              $Easing.$float,
+              0,
+              rotateStep,
+              duration,
+              animationState._0.elapsedTime);
+            case "Nothing": return 0;}
+         _U.badCase($moduleName,
+         "between lines 70 and 74");
+      }();
+   };
+   var view = F2(function (address,
+   model) {
+      return function () {
+         var angle = model.angle + toOffset(model.animationState);
+         return A2($Svg.svg,
+         _L.fromArray([$Svg$Attributes.width("200")
+                      ,$Svg$Attributes.height("200")
+                      ,$Svg$Attributes.viewBox("0 0 200 200")]),
+         _L.fromArray([A2($Svg.g,
+         _L.fromArray([$Svg$Attributes.transform(A2($Basics._op["++"],
+                      "translate(100, 100) rotate (",
+                      A2($Basics._op["++"],
+                      $Basics.toString(angle),
+                      ")")))
+                      ,$Svg$Events.onClick(A2($Signal.message,
+                      address,
+                      Spin))]),
+         _L.fromArray([A2($Svg.rect,
+                      _L.fromArray([$Svg$Attributes.x("-50")
+                                   ,$Svg$Attributes.y("-50")
+                                   ,$Svg$Attributes.width("100")
+                                   ,$Svg$Attributes.height("100")
+                                   ,$Svg$Attributes.rx("15")
+                                   ,$Svg$Attributes.ry("15")
+                                   ,$Svg$Attributes.style("fill: #60B5cc;")]),
+                      _L.fromArray([]))
+                      ,A2($Svg.text$,
+                      _L.fromArray([$Svg$Attributes.fill("white")
+                                   ,$Svg$Attributes.textAnchor("middle")]),
+                      _L.fromArray([$Svg.text("click me!")]))]))]));
+      }();
+   });
+   var init = {ctor: "_Tuple2"
+              ,_0: {_: {}
+                   ,angle: 0
+                   ,animationState: $Maybe.Nothing}
+              ,_1: $Effects.none};
+   var Model = F2(function (a,b) {
+      return {_: {}
+             ,angle: a
+             ,animationState: b};
+   });
+   _elm.SpinSquare.values = {_op: _op
+                            ,init: init
+                            ,update: update
+                            ,view: view
+                            ,Model: Model};
+   return _elm.SpinSquare.values;
+};
+Elm.SpinSquarePair = Elm.SpinSquarePair || {};
+Elm.SpinSquarePair.make = function (_elm) {
+   "use strict";
+   _elm.SpinSquarePair = _elm.SpinSquarePair || {};
+   if (_elm.SpinSquarePair.values)
+   return _elm.SpinSquarePair.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "SpinSquarePair",
+   $Basics = Elm.Basics.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $SpinSquare = Elm.SpinSquare.make(_elm);
+   _op["=>"] = F2(function (v0,
+   v1) {
+      return {ctor: "_Tuple2"
+             ,_0: v0
+             ,_1: v1};
+   });
+   var Right = function (a) {
+      return {ctor: "Right",_0: a};
+   };
+   var Left = function (a) {
+      return {ctor: "Left",_0: a};
+   };
+   var view = F2(function (address,
+   model) {
+      return A2($Html.div,
+      _L.fromArray([$Html$Attributes.style(_L.fromArray([A2(_op["=>"],
+      "display",
+      "flex")]))]),
+      _L.fromArray([A2($SpinSquare.view,
+                   A2($Signal.forwardTo,
+                   address,
+                   Left),
+                   model.left)
+                   ,A2($SpinSquare.view,
+                   A2($Signal.forwardTo,
+                   address,
+                   Right),
+                   model.right)]));
+   });
+   var Model = F2(function (a,b) {
+      return {_: {}
+             ,left: a
+             ,right: b};
+   });
+   var init = function () {
+      var $ = $SpinSquare.init,
+      right = $._0,
+      rightFx = $._1;
+      var $ = $SpinSquare.init,
+      left = $._0,
+      leftFx = $._1;
+      return {ctor: "_Tuple2"
+             ,_0: A2(Model,left,right)
+             ,_1: $Effects.batch(_L.fromArray([A2($Effects.map,
+                                              Left,
+                                              leftFx)
+                                              ,A2($Effects.map,
+                                              Right,
+                                              rightFx)]))};
+   }();
+   var update = F2(function (action,
+   model) {
+      return function () {
+         switch (action.ctor)
+         {case "Left":
+            return function () {
+                 var $ = A2($SpinSquare.update,
+                 action._0,
+                 model.left),
+                 left = $._0,
+                 fx = $._1;
+                 return {ctor: "_Tuple2"
+                        ,_0: A2(Model,left,model.right)
+                        ,_1: A2($Effects.map,Left,fx)};
+              }();
+            case "Right":
+            return function () {
+                 var $ = A2($SpinSquare.update,
+                 action._0,
+                 model.right),
+                 right = $._0,
+                 fx = $._1;
+                 return {ctor: "_Tuple2"
+                        ,_0: A2(Model,model.left,right)
+                        ,_1: A2($Effects.map,Right,fx)};
+              }();}
+         _U.badCase($moduleName,
+         "between lines 33 and 48");
+      }();
+   });
+   _elm.SpinSquarePair.values = {_op: _op
+                                ,Model: Model
+                                ,init: init
+                                ,Left: Left
+                                ,Right: Right
+                                ,update: update
+                                ,view: view};
+   return _elm.SpinSquarePair.values;
+};
 Elm.StartApp = Elm.StartApp || {};
 Elm.StartApp.make = function (_elm) {
    "use strict";
@@ -13760,6 +13405,803 @@ Elm.String.make = function (_elm) {
                         ,any: any
                         ,all: all};
    return _elm.String.values;
+};
+Elm.Svg = Elm.Svg || {};
+Elm.Svg.make = function (_elm) {
+   "use strict";
+   _elm.Svg = _elm.Svg || {};
+   if (_elm.Svg.values)
+   return _elm.Svg.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Svg",
+   $Basics = Elm.Basics.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Json$Encode = Elm.Json.Encode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var text = $VirtualDom.text;
+   var svgNamespace = A2($VirtualDom.property,
+   "namespace",
+   $Json$Encode.string("http://www.w3.org/2000/svg"));
+   var node = F3(function (name,
+   attributes,
+   children) {
+      return A3($VirtualDom.node,
+      name,
+      A2($List._op["::"],
+      svgNamespace,
+      attributes),
+      children);
+   });
+   var svg = node("svg");
+   var foreignObject = node("foreignObject");
+   var animate = node("animate");
+   var animateColor = node("animateColor");
+   var animateMotion = node("animateMotion");
+   var animateTransform = node("animateTransform");
+   var mpath = node("mpath");
+   var set = node("set");
+   var a = node("a");
+   var defs = node("defs");
+   var g = node("g");
+   var marker = node("marker");
+   var mask = node("mask");
+   var missingGlyph = node("missingGlyph");
+   var pattern = node("pattern");
+   var $switch = node("switch");
+   var symbol = node("symbol");
+   var desc = node("desc");
+   var metadata = node("metadata");
+   var title = node("title");
+   var feBlend = node("feBlend");
+   var feColorMatrix = node("feColorMatrix");
+   var feComponentTransfer = node("feComponentTransfer");
+   var feComposite = node("feComposite");
+   var feConvolveMatrix = node("feConvolveMatrix");
+   var feDiffuseLighting = node("feDiffuseLighting");
+   var feDisplacementMap = node("feDisplacementMap");
+   var feFlood = node("feFlood");
+   var feFuncA = node("feFuncA");
+   var feFuncB = node("feFuncB");
+   var feFuncG = node("feFuncG");
+   var feFuncR = node("feFuncR");
+   var feGaussianBlur = node("feGaussianBlur");
+   var feImage = node("feImage");
+   var feMerge = node("feMerge");
+   var feMergeNode = node("feMergeNode");
+   var feMorphology = node("feMorphology");
+   var feOffset = node("feOffset");
+   var feSpecularLighting = node("feSpecularLighting");
+   var feTile = node("feTile");
+   var feTurbulence = node("feTurbulence");
+   var font = node("font");
+   var fontFace = node("fontFace");
+   var fontFaceFormat = node("fontFaceFormat");
+   var fontFaceName = node("fontFaceName");
+   var fontFaceSrc = node("fontFaceSrc");
+   var fontFaceUri = node("fontFaceUri");
+   var hkern = node("hkern");
+   var vkern = node("vkern");
+   var linearGradient = node("linearGradient");
+   var radialGradient = node("radialGradient");
+   var stop = node("stop");
+   var circle = node("circle");
+   var ellipse = node("ellipse");
+   var image = node("image");
+   var line = node("line");
+   var path = node("path");
+   var polygon = node("polygon");
+   var polyline = node("polyline");
+   var rect = node("rect");
+   var use = node("use");
+   var feDistantLight = node("feDistantLight");
+   var fePointLight = node("fePointLight");
+   var feSpotLight = node("feSpotLight");
+   var altGlyph = node("altGlyph");
+   var altGlyphDef = node("altGlyphDef");
+   var altGlyphItem = node("altGlyphItem");
+   var glyph = node("glyph");
+   var glyphRef = node("glyphRef");
+   var textPath = node("textPath");
+   var text$ = node("text");
+   var tref = node("tref");
+   var tspan = node("tspan");
+   var clipPath = node("clipPath");
+   var colorProfile = node("colorProfile");
+   var cursor = node("cursor");
+   var filter = node("filter");
+   var script = node("script");
+   var style = node("style");
+   var view = node("view");
+   _elm.Svg.values = {_op: _op
+                     ,text: text
+                     ,node: node
+                     ,svg: svg
+                     ,foreignObject: foreignObject
+                     ,circle: circle
+                     ,ellipse: ellipse
+                     ,image: image
+                     ,line: line
+                     ,path: path
+                     ,polygon: polygon
+                     ,polyline: polyline
+                     ,rect: rect
+                     ,use: use
+                     ,animate: animate
+                     ,animateColor: animateColor
+                     ,animateMotion: animateMotion
+                     ,animateTransform: animateTransform
+                     ,mpath: mpath
+                     ,set: set
+                     ,desc: desc
+                     ,metadata: metadata
+                     ,title: title
+                     ,a: a
+                     ,defs: defs
+                     ,g: g
+                     ,marker: marker
+                     ,mask: mask
+                     ,missingGlyph: missingGlyph
+                     ,pattern: pattern
+                     ,$switch: $switch
+                     ,symbol: symbol
+                     ,altGlyph: altGlyph
+                     ,altGlyphDef: altGlyphDef
+                     ,altGlyphItem: altGlyphItem
+                     ,glyph: glyph
+                     ,glyphRef: glyphRef
+                     ,textPath: textPath
+                     ,text$: text$
+                     ,tref: tref
+                     ,tspan: tspan
+                     ,font: font
+                     ,fontFace: fontFace
+                     ,fontFaceFormat: fontFaceFormat
+                     ,fontFaceName: fontFaceName
+                     ,fontFaceSrc: fontFaceSrc
+                     ,fontFaceUri: fontFaceUri
+                     ,hkern: hkern
+                     ,vkern: vkern
+                     ,linearGradient: linearGradient
+                     ,radialGradient: radialGradient
+                     ,stop: stop
+                     ,feBlend: feBlend
+                     ,feColorMatrix: feColorMatrix
+                     ,feComponentTransfer: feComponentTransfer
+                     ,feComposite: feComposite
+                     ,feConvolveMatrix: feConvolveMatrix
+                     ,feDiffuseLighting: feDiffuseLighting
+                     ,feDisplacementMap: feDisplacementMap
+                     ,feFlood: feFlood
+                     ,feFuncA: feFuncA
+                     ,feFuncB: feFuncB
+                     ,feFuncG: feFuncG
+                     ,feFuncR: feFuncR
+                     ,feGaussianBlur: feGaussianBlur
+                     ,feImage: feImage
+                     ,feMerge: feMerge
+                     ,feMergeNode: feMergeNode
+                     ,feMorphology: feMorphology
+                     ,feOffset: feOffset
+                     ,feSpecularLighting: feSpecularLighting
+                     ,feTile: feTile
+                     ,feTurbulence: feTurbulence
+                     ,feDistantLight: feDistantLight
+                     ,fePointLight: fePointLight
+                     ,feSpotLight: feSpotLight
+                     ,clipPath: clipPath
+                     ,colorProfile: colorProfile
+                     ,cursor: cursor
+                     ,filter: filter
+                     ,script: script
+                     ,style: style
+                     ,view: view};
+   return _elm.Svg.values;
+};
+Elm.Svg = Elm.Svg || {};
+Elm.Svg.Attributes = Elm.Svg.Attributes || {};
+Elm.Svg.Attributes.make = function (_elm) {
+   "use strict";
+   _elm.Svg = _elm.Svg || {};
+   _elm.Svg.Attributes = _elm.Svg.Attributes || {};
+   if (_elm.Svg.Attributes.values)
+   return _elm.Svg.Attributes.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Svg.Attributes",
+   $Basics = Elm.Basics.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Svg = Elm.Svg.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var writingMode = $VirtualDom.attribute("writing-mode");
+   var wordSpacing = $VirtualDom.attribute("word-spacing");
+   var visibility = $VirtualDom.attribute("visibility");
+   var unicodeBidi = $VirtualDom.attribute("unicode-bidi");
+   var textRendering = $VirtualDom.attribute("text-rendering");
+   var textDecoration = $VirtualDom.attribute("text-decoration");
+   var textAnchor = $VirtualDom.attribute("text-anchor");
+   var stroke = $VirtualDom.attribute("stroke");
+   var strokeWidth = $VirtualDom.attribute("stroke-width");
+   var strokeOpacity = $VirtualDom.attribute("stroke-opacity");
+   var strokeMiterlimit = $VirtualDom.attribute("stroke-miterlimit");
+   var strokeLinejoin = $VirtualDom.attribute("stroke-linejoin");
+   var strokeLinecap = $VirtualDom.attribute("stroke-linecap");
+   var strokeDashoffset = $VirtualDom.attribute("stroke-dashoffset");
+   var strokeDasharray = $VirtualDom.attribute("stroke-dasharray");
+   var stopOpacity = $VirtualDom.attribute("stop-opacity");
+   var stopColor = $VirtualDom.attribute("stop-color");
+   var shapeRendering = $VirtualDom.attribute("shape-rendering");
+   var pointerEvents = $VirtualDom.attribute("pointer-events");
+   var overflow = $VirtualDom.attribute("overflow");
+   var opacity = $VirtualDom.attribute("opacity");
+   var mask = $VirtualDom.attribute("mask");
+   var markerStart = $VirtualDom.attribute("marker-start");
+   var markerMid = $VirtualDom.attribute("marker-mid");
+   var markerEnd = $VirtualDom.attribute("marker-end");
+   var lightingColor = $VirtualDom.attribute("lighting-color");
+   var letterSpacing = $VirtualDom.attribute("letter-spacing");
+   var kerning = $VirtualDom.attribute("kerning");
+   var imageRendering = $VirtualDom.attribute("image-rendering");
+   var glyphOrientationVertical = $VirtualDom.attribute("glyph-orientation-vertical");
+   var glyphOrientationHorizontal = $VirtualDom.attribute("glyph-orientation-horizontal");
+   var fontWeight = $VirtualDom.attribute("font-weight");
+   var fontVariant = $VirtualDom.attribute("font-variant");
+   var fontStyle = $VirtualDom.attribute("font-style");
+   var fontStretch = $VirtualDom.attribute("font-stretch");
+   var fontSize = $VirtualDom.attribute("font-size");
+   var fontSizeAdjust = $VirtualDom.attribute("font-size-adjust");
+   var fontFamily = $VirtualDom.attribute("font-family");
+   var floodOpacity = $VirtualDom.attribute("flood-opacity");
+   var floodColor = $VirtualDom.attribute("flood-color");
+   var filter = $VirtualDom.attribute("filter");
+   var fill = $VirtualDom.attribute("fill");
+   var fillRule = $VirtualDom.attribute("fill-rule");
+   var fillOpacity = $VirtualDom.attribute("fill-opacity");
+   var enableBackground = $VirtualDom.attribute("enable-background");
+   var dominantBaseline = $VirtualDom.attribute("dominant-baseline");
+   var display = $VirtualDom.attribute("display");
+   var direction = $VirtualDom.attribute("direction");
+   var cursor = $VirtualDom.attribute("cursor");
+   var color = $VirtualDom.attribute("color");
+   var colorRendering = $VirtualDom.attribute("color-rendering");
+   var colorProfile = $VirtualDom.attribute("color-profile");
+   var colorInterpolation = $VirtualDom.attribute("color-interpolation");
+   var colorInterpolationFilters = $VirtualDom.attribute("color-interpolation-filters");
+   var clip = $VirtualDom.attribute("clip");
+   var clipRule = $VirtualDom.attribute("clip-rule");
+   var clipPath = $VirtualDom.attribute("clip-path");
+   var baselineShift = $VirtualDom.attribute("baseline-shift");
+   var alignmentBaseline = $VirtualDom.attribute("alignment-baseline");
+   var zoomAndPan = $VirtualDom.attribute("zoomAndPan");
+   var z = $VirtualDom.attribute("z");
+   var yChannelSelector = $VirtualDom.attribute("yChannelSelector");
+   var y2 = $VirtualDom.attribute("y2");
+   var y1 = $VirtualDom.attribute("y1");
+   var y = $VirtualDom.attribute("y");
+   var xmlSpace = $VirtualDom.attribute("xml:space");
+   var xmlLang = $VirtualDom.attribute("xml:lang");
+   var xmlBase = $VirtualDom.attribute("xml:base");
+   var xlinkType = $VirtualDom.attribute("xlink:type");
+   var xlinkTitle = $VirtualDom.attribute("xlink:title");
+   var xlinkShow = $VirtualDom.attribute("xlink:show");
+   var xlinkRole = $VirtualDom.attribute("xlink:role");
+   var xlinkHref = $VirtualDom.attribute("xlink:href");
+   var xlinkArcrole = $VirtualDom.attribute("xlink:arcrole");
+   var xlinkActuate = $VirtualDom.attribute("xlink:actuate");
+   var xChannelSelector = $VirtualDom.attribute("xChannelSelector");
+   var x2 = $VirtualDom.attribute("x2");
+   var x1 = $VirtualDom.attribute("x1");
+   var xHeight = $VirtualDom.attribute("x-height");
+   var x = $VirtualDom.attribute("x");
+   var widths = $VirtualDom.attribute("widths");
+   var width = $VirtualDom.attribute("width");
+   var viewTarget = $VirtualDom.attribute("viewTarget");
+   var viewBox = $VirtualDom.attribute("viewBox");
+   var vertOriginY = $VirtualDom.attribute("vert-origin-y");
+   var vertOriginX = $VirtualDom.attribute("vert-origin-x");
+   var vertAdvY = $VirtualDom.attribute("vert-adv-y");
+   var version = $VirtualDom.attribute("version");
+   var values = $VirtualDom.attribute("values");
+   var vMathematical = $VirtualDom.attribute("v-mathematical");
+   var vIdeographic = $VirtualDom.attribute("v-ideographic");
+   var vHanging = $VirtualDom.attribute("v-hanging");
+   var vAlphabetic = $VirtualDom.attribute("v-alphabetic");
+   var unitsPerEm = $VirtualDom.attribute("units-per-em");
+   var unicodeRange = $VirtualDom.attribute("unicode-range");
+   var unicode = $VirtualDom.attribute("unicode");
+   var underlineThickness = $VirtualDom.attribute("underline-thickness");
+   var underlinePosition = $VirtualDom.attribute("underline-position");
+   var u2 = $VirtualDom.attribute("u2");
+   var u1 = $VirtualDom.attribute("u1");
+   var type$ = $VirtualDom.attribute("type");
+   var transform = $VirtualDom.attribute("transform");
+   var to = $VirtualDom.attribute("to");
+   var title = $VirtualDom.attribute("title");
+   var textLength = $VirtualDom.attribute("textLength");
+   var targetY = $VirtualDom.attribute("targetY");
+   var targetX = $VirtualDom.attribute("targetX");
+   var target = $VirtualDom.attribute("target");
+   var tableValues = $VirtualDom.attribute("tableValues");
+   var systemLanguage = $VirtualDom.attribute("systemLanguage");
+   var surfaceScale = $VirtualDom.attribute("surfaceScale");
+   var style = $VirtualDom.attribute("style");
+   var string = $VirtualDom.attribute("string");
+   var strikethroughThickness = $VirtualDom.attribute("strikethrough-thickness");
+   var strikethroughPosition = $VirtualDom.attribute("strikethrough-position");
+   var stitchTiles = $VirtualDom.attribute("stitchTiles");
+   var stemv = $VirtualDom.attribute("stemv");
+   var stemh = $VirtualDom.attribute("stemh");
+   var stdDeviation = $VirtualDom.attribute("stdDeviation");
+   var startOffset = $VirtualDom.attribute("startOffset");
+   var spreadMethod = $VirtualDom.attribute("spreadMethod");
+   var speed = $VirtualDom.attribute("speed");
+   var specularExponent = $VirtualDom.attribute("specularExponent");
+   var specularConstant = $VirtualDom.attribute("specularConstant");
+   var spacing = $VirtualDom.attribute("spacing");
+   var slope = $VirtualDom.attribute("slope");
+   var seed = $VirtualDom.attribute("seed");
+   var scale = $VirtualDom.attribute("scale");
+   var ry = $VirtualDom.attribute("ry");
+   var rx = $VirtualDom.attribute("rx");
+   var rotate = $VirtualDom.attribute("rotate");
+   var result = $VirtualDom.attribute("result");
+   var restart = $VirtualDom.attribute("restart");
+   var requiredFeatures = $VirtualDom.attribute("requiredFeatures");
+   var requiredExtensions = $VirtualDom.attribute("requiredExtensions");
+   var repeatDur = $VirtualDom.attribute("repeatDur");
+   var repeatCount = $VirtualDom.attribute("repeatCount");
+   var renderingIntent = $VirtualDom.attribute("rendering-intent");
+   var refY = $VirtualDom.attribute("refY");
+   var refX = $VirtualDom.attribute("refX");
+   var radius = $VirtualDom.attribute("radius");
+   var r = $VirtualDom.attribute("r");
+   var primitiveUnits = $VirtualDom.attribute("primitiveUnits");
+   var preserveAspectRatio = $VirtualDom.attribute("preserveAspectRatio");
+   var preserveAlpha = $VirtualDom.attribute("preserveAlpha");
+   var pointsAtZ = $VirtualDom.attribute("pointsAtZ");
+   var pointsAtY = $VirtualDom.attribute("pointsAtY");
+   var pointsAtX = $VirtualDom.attribute("pointsAtX");
+   var points = $VirtualDom.attribute("points");
+   var pointOrder = $VirtualDom.attribute("point-order");
+   var patternUnits = $VirtualDom.attribute("patternUnits");
+   var patternTransform = $VirtualDom.attribute("patternTransform");
+   var patternContentUnits = $VirtualDom.attribute("patternContentUnits");
+   var pathLength = $VirtualDom.attribute("pathLength");
+   var path = $VirtualDom.attribute("path");
+   var panose1 = $VirtualDom.attribute("panose-1");
+   var overlineThickness = $VirtualDom.attribute("overline-thickness");
+   var overlinePosition = $VirtualDom.attribute("overline-position");
+   var origin = $VirtualDom.attribute("origin");
+   var orientation = $VirtualDom.attribute("orientation");
+   var orient = $VirtualDom.attribute("orient");
+   var order = $VirtualDom.attribute("order");
+   var operator = $VirtualDom.attribute("operator");
+   var offset = $VirtualDom.attribute("offset");
+   var numOctaves = $VirtualDom.attribute("numOctaves");
+   var name = $VirtualDom.attribute("name");
+   var mode = $VirtualDom.attribute("mode");
+   var min = $VirtualDom.attribute("min");
+   var method = $VirtualDom.attribute("method");
+   var media = $VirtualDom.attribute("media");
+   var max = $VirtualDom.attribute("max");
+   var mathematical = $VirtualDom.attribute("mathematical");
+   var maskUnits = $VirtualDom.attribute("maskUnits");
+   var maskContentUnits = $VirtualDom.attribute("maskContentUnits");
+   var markerWidth = $VirtualDom.attribute("markerWidth");
+   var markerUnits = $VirtualDom.attribute("markerUnits");
+   var markerHeight = $VirtualDom.attribute("markerHeight");
+   var local = $VirtualDom.attribute("local");
+   var limitingConeAngle = $VirtualDom.attribute("limitingConeAngle");
+   var lengthAdjust = $VirtualDom.attribute("lengthAdjust");
+   var lang = $VirtualDom.attribute("lang");
+   var keyTimes = $VirtualDom.attribute("keyTimes");
+   var keySplines = $VirtualDom.attribute("keySplines");
+   var keyPoints = $VirtualDom.attribute("keyPoints");
+   var kernelUnitLength = $VirtualDom.attribute("kernelUnitLength");
+   var kernelMatrix = $VirtualDom.attribute("kernelMatrix");
+   var k4 = $VirtualDom.attribute("k4");
+   var k3 = $VirtualDom.attribute("k3");
+   var k2 = $VirtualDom.attribute("k2");
+   var k1 = $VirtualDom.attribute("k1");
+   var k = $VirtualDom.attribute("k");
+   var intercept = $VirtualDom.attribute("intercept");
+   var in2 = $VirtualDom.attribute("in2");
+   var in$ = $VirtualDom.attribute("in");
+   var ideographic = $VirtualDom.attribute("ideographic");
+   var id = $VirtualDom.attribute("id");
+   var horizOriginY = $VirtualDom.attribute("horiz-origin-y");
+   var horizOriginX = $VirtualDom.attribute("horiz-origin-x");
+   var horizAdvX = $VirtualDom.attribute("horiz-adv-x");
+   var height = $VirtualDom.attribute("height");
+   var hanging = $VirtualDom.attribute("hanging");
+   var gradientUnits = $VirtualDom.attribute("gradientUnits");
+   var gradientTransform = $VirtualDom.attribute("gradientTransform");
+   var glyphRef = $VirtualDom.attribute("glyphRef");
+   var glyphName = $VirtualDom.attribute("glyph-name");
+   var g2 = $VirtualDom.attribute("g2");
+   var g1 = $VirtualDom.attribute("g1");
+   var fy = $VirtualDom.attribute("fy");
+   var fx = $VirtualDom.attribute("fx");
+   var from = $VirtualDom.attribute("from");
+   var format = $VirtualDom.attribute("format");
+   var filterUnits = $VirtualDom.attribute("filterUnits");
+   var filterRes = $VirtualDom.attribute("filterRes");
+   var externalResourcesRequired = $VirtualDom.attribute("externalResourcesRequired");
+   var exponent = $VirtualDom.attribute("exponent");
+   var end = $VirtualDom.attribute("end");
+   var elevation = $VirtualDom.attribute("elevation");
+   var edgeMode = $VirtualDom.attribute("edgeMode");
+   var dy = $VirtualDom.attribute("dy");
+   var dx = $VirtualDom.attribute("dx");
+   var dur = $VirtualDom.attribute("dur");
+   var divisor = $VirtualDom.attribute("divisor");
+   var diffuseConstant = $VirtualDom.attribute("diffuseConstant");
+   var descent = $VirtualDom.attribute("descent");
+   var decelerate = $VirtualDom.attribute("decelerate");
+   var d = $VirtualDom.attribute("d");
+   var cy = $VirtualDom.attribute("cy");
+   var cx = $VirtualDom.attribute("cx");
+   var contentStyleType = $VirtualDom.attribute("contentStyleType");
+   var contentScriptType = $VirtualDom.attribute("contentScriptType");
+   var clipPathUnits = $VirtualDom.attribute("clipPathUnits");
+   var $class = $VirtualDom.attribute("class");
+   var capHeight = $VirtualDom.attribute("cap-height");
+   var calcMode = $VirtualDom.attribute("calcMode");
+   var by = $VirtualDom.attribute("by");
+   var bias = $VirtualDom.attribute("bias");
+   var begin = $VirtualDom.attribute("begin");
+   var bbox = $VirtualDom.attribute("bbox");
+   var baseProfile = $VirtualDom.attribute("baseProfile");
+   var baseFrequency = $VirtualDom.attribute("baseFrequency");
+   var azimuth = $VirtualDom.attribute("azimuth");
+   var autoReverse = $VirtualDom.attribute("autoReverse");
+   var attributeType = $VirtualDom.attribute("attributeType");
+   var attributeName = $VirtualDom.attribute("attributeName");
+   var ascent = $VirtualDom.attribute("ascent");
+   var arabicForm = $VirtualDom.attribute("arabic-form");
+   var amplitude = $VirtualDom.attribute("amplitude");
+   var allowReorder = $VirtualDom.attribute("allowReorder");
+   var alphabetic = $VirtualDom.attribute("alphabetic");
+   var additive = $VirtualDom.attribute("additive");
+   var accumulate = $VirtualDom.attribute("accumulate");
+   var accelerate = $VirtualDom.attribute("accelerate");
+   var accentHeight = $VirtualDom.attribute("accent-height");
+   _elm.Svg.Attributes.values = {_op: _op
+                                ,accentHeight: accentHeight
+                                ,accelerate: accelerate
+                                ,accumulate: accumulate
+                                ,additive: additive
+                                ,alphabetic: alphabetic
+                                ,allowReorder: allowReorder
+                                ,amplitude: amplitude
+                                ,arabicForm: arabicForm
+                                ,ascent: ascent
+                                ,attributeName: attributeName
+                                ,attributeType: attributeType
+                                ,autoReverse: autoReverse
+                                ,azimuth: azimuth
+                                ,baseFrequency: baseFrequency
+                                ,baseProfile: baseProfile
+                                ,bbox: bbox
+                                ,begin: begin
+                                ,bias: bias
+                                ,by: by
+                                ,calcMode: calcMode
+                                ,capHeight: capHeight
+                                ,$class: $class
+                                ,clipPathUnits: clipPathUnits
+                                ,contentScriptType: contentScriptType
+                                ,contentStyleType: contentStyleType
+                                ,cx: cx
+                                ,cy: cy
+                                ,d: d
+                                ,decelerate: decelerate
+                                ,descent: descent
+                                ,diffuseConstant: diffuseConstant
+                                ,divisor: divisor
+                                ,dur: dur
+                                ,dx: dx
+                                ,dy: dy
+                                ,edgeMode: edgeMode
+                                ,elevation: elevation
+                                ,end: end
+                                ,exponent: exponent
+                                ,externalResourcesRequired: externalResourcesRequired
+                                ,filterRes: filterRes
+                                ,filterUnits: filterUnits
+                                ,format: format
+                                ,from: from
+                                ,fx: fx
+                                ,fy: fy
+                                ,g1: g1
+                                ,g2: g2
+                                ,glyphName: glyphName
+                                ,glyphRef: glyphRef
+                                ,gradientTransform: gradientTransform
+                                ,gradientUnits: gradientUnits
+                                ,hanging: hanging
+                                ,height: height
+                                ,horizAdvX: horizAdvX
+                                ,horizOriginX: horizOriginX
+                                ,horizOriginY: horizOriginY
+                                ,id: id
+                                ,ideographic: ideographic
+                                ,in$: in$
+                                ,in2: in2
+                                ,intercept: intercept
+                                ,k: k
+                                ,k1: k1
+                                ,k2: k2
+                                ,k3: k3
+                                ,k4: k4
+                                ,kernelMatrix: kernelMatrix
+                                ,kernelUnitLength: kernelUnitLength
+                                ,keyPoints: keyPoints
+                                ,keySplines: keySplines
+                                ,keyTimes: keyTimes
+                                ,lang: lang
+                                ,lengthAdjust: lengthAdjust
+                                ,limitingConeAngle: limitingConeAngle
+                                ,local: local
+                                ,markerHeight: markerHeight
+                                ,markerUnits: markerUnits
+                                ,markerWidth: markerWidth
+                                ,maskContentUnits: maskContentUnits
+                                ,maskUnits: maskUnits
+                                ,mathematical: mathematical
+                                ,max: max
+                                ,media: media
+                                ,method: method
+                                ,min: min
+                                ,mode: mode
+                                ,name: name
+                                ,numOctaves: numOctaves
+                                ,offset: offset
+                                ,operator: operator
+                                ,order: order
+                                ,orient: orient
+                                ,orientation: orientation
+                                ,origin: origin
+                                ,overlinePosition: overlinePosition
+                                ,overlineThickness: overlineThickness
+                                ,panose1: panose1
+                                ,path: path
+                                ,pathLength: pathLength
+                                ,patternContentUnits: patternContentUnits
+                                ,patternTransform: patternTransform
+                                ,patternUnits: patternUnits
+                                ,pointOrder: pointOrder
+                                ,points: points
+                                ,pointsAtX: pointsAtX
+                                ,pointsAtY: pointsAtY
+                                ,pointsAtZ: pointsAtZ
+                                ,preserveAlpha: preserveAlpha
+                                ,preserveAspectRatio: preserveAspectRatio
+                                ,primitiveUnits: primitiveUnits
+                                ,r: r
+                                ,radius: radius
+                                ,refX: refX
+                                ,refY: refY
+                                ,renderingIntent: renderingIntent
+                                ,repeatCount: repeatCount
+                                ,repeatDur: repeatDur
+                                ,requiredExtensions: requiredExtensions
+                                ,requiredFeatures: requiredFeatures
+                                ,restart: restart
+                                ,result: result
+                                ,rotate: rotate
+                                ,rx: rx
+                                ,ry: ry
+                                ,scale: scale
+                                ,seed: seed
+                                ,slope: slope
+                                ,spacing: spacing
+                                ,specularConstant: specularConstant
+                                ,specularExponent: specularExponent
+                                ,speed: speed
+                                ,spreadMethod: spreadMethod
+                                ,startOffset: startOffset
+                                ,stdDeviation: stdDeviation
+                                ,stemh: stemh
+                                ,stemv: stemv
+                                ,stitchTiles: stitchTiles
+                                ,strikethroughPosition: strikethroughPosition
+                                ,strikethroughThickness: strikethroughThickness
+                                ,string: string
+                                ,style: style
+                                ,surfaceScale: surfaceScale
+                                ,systemLanguage: systemLanguage
+                                ,tableValues: tableValues
+                                ,target: target
+                                ,targetX: targetX
+                                ,targetY: targetY
+                                ,textLength: textLength
+                                ,title: title
+                                ,to: to
+                                ,transform: transform
+                                ,type$: type$
+                                ,u1: u1
+                                ,u2: u2
+                                ,underlinePosition: underlinePosition
+                                ,underlineThickness: underlineThickness
+                                ,unicode: unicode
+                                ,unicodeRange: unicodeRange
+                                ,unitsPerEm: unitsPerEm
+                                ,vAlphabetic: vAlphabetic
+                                ,vHanging: vHanging
+                                ,vIdeographic: vIdeographic
+                                ,vMathematical: vMathematical
+                                ,values: values
+                                ,version: version
+                                ,vertAdvY: vertAdvY
+                                ,vertOriginX: vertOriginX
+                                ,vertOriginY: vertOriginY
+                                ,viewBox: viewBox
+                                ,viewTarget: viewTarget
+                                ,width: width
+                                ,widths: widths
+                                ,x: x
+                                ,xHeight: xHeight
+                                ,x1: x1
+                                ,x2: x2
+                                ,xChannelSelector: xChannelSelector
+                                ,xlinkActuate: xlinkActuate
+                                ,xlinkArcrole: xlinkArcrole
+                                ,xlinkHref: xlinkHref
+                                ,xlinkRole: xlinkRole
+                                ,xlinkShow: xlinkShow
+                                ,xlinkTitle: xlinkTitle
+                                ,xlinkType: xlinkType
+                                ,xmlBase: xmlBase
+                                ,xmlLang: xmlLang
+                                ,xmlSpace: xmlSpace
+                                ,y: y
+                                ,y1: y1
+                                ,y2: y2
+                                ,yChannelSelector: yChannelSelector
+                                ,z: z
+                                ,zoomAndPan: zoomAndPan
+                                ,alignmentBaseline: alignmentBaseline
+                                ,baselineShift: baselineShift
+                                ,clipPath: clipPath
+                                ,clipRule: clipRule
+                                ,clip: clip
+                                ,colorInterpolationFilters: colorInterpolationFilters
+                                ,colorInterpolation: colorInterpolation
+                                ,colorProfile: colorProfile
+                                ,colorRendering: colorRendering
+                                ,color: color
+                                ,cursor: cursor
+                                ,direction: direction
+                                ,display: display
+                                ,dominantBaseline: dominantBaseline
+                                ,enableBackground: enableBackground
+                                ,fillOpacity: fillOpacity
+                                ,fillRule: fillRule
+                                ,fill: fill
+                                ,filter: filter
+                                ,floodColor: floodColor
+                                ,floodOpacity: floodOpacity
+                                ,fontFamily: fontFamily
+                                ,fontSizeAdjust: fontSizeAdjust
+                                ,fontSize: fontSize
+                                ,fontStretch: fontStretch
+                                ,fontStyle: fontStyle
+                                ,fontVariant: fontVariant
+                                ,fontWeight: fontWeight
+                                ,glyphOrientationHorizontal: glyphOrientationHorizontal
+                                ,glyphOrientationVertical: glyphOrientationVertical
+                                ,imageRendering: imageRendering
+                                ,kerning: kerning
+                                ,letterSpacing: letterSpacing
+                                ,lightingColor: lightingColor
+                                ,markerEnd: markerEnd
+                                ,markerMid: markerMid
+                                ,markerStart: markerStart
+                                ,mask: mask
+                                ,opacity: opacity
+                                ,overflow: overflow
+                                ,pointerEvents: pointerEvents
+                                ,shapeRendering: shapeRendering
+                                ,stopColor: stopColor
+                                ,stopOpacity: stopOpacity
+                                ,strokeDasharray: strokeDasharray
+                                ,strokeDashoffset: strokeDashoffset
+                                ,strokeLinecap: strokeLinecap
+                                ,strokeLinejoin: strokeLinejoin
+                                ,strokeMiterlimit: strokeMiterlimit
+                                ,strokeOpacity: strokeOpacity
+                                ,strokeWidth: strokeWidth
+                                ,stroke: stroke
+                                ,textAnchor: textAnchor
+                                ,textDecoration: textDecoration
+                                ,textRendering: textRendering
+                                ,unicodeBidi: unicodeBidi
+                                ,visibility: visibility
+                                ,wordSpacing: wordSpacing
+                                ,writingMode: writingMode};
+   return _elm.Svg.Attributes.values;
+};
+Elm.Svg = Elm.Svg || {};
+Elm.Svg.Events = Elm.Svg.Events || {};
+Elm.Svg.Events.make = function (_elm) {
+   "use strict";
+   _elm.Svg = _elm.Svg || {};
+   _elm.Svg.Events = _elm.Svg.Events || {};
+   if (_elm.Svg.Events.values)
+   return _elm.Svg.Events.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Svg.Events",
+   $Basics = Elm.Basics.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Svg = Elm.Svg.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var on = $VirtualDom.on;
+   var messageOn = F2(function (name,
+   msg) {
+      return A3(on,
+      name,
+      $Json$Decode.value,
+      $Basics.always(msg));
+   });
+   var onBegin = messageOn("begin");
+   var onEnd = messageOn("end");
+   var onRepeat = messageOn("repeat");
+   var onAbort = messageOn("abort");
+   var onError = messageOn("error");
+   var onResize = messageOn("resize");
+   var onScroll = messageOn("scroll");
+   var onLoad = messageOn("load");
+   var onUnload = messageOn("unload");
+   var onZoom = messageOn("zoom");
+   var onActivate = messageOn("activate");
+   var onClick = messageOn("click");
+   var onFocusIn = messageOn("focusin");
+   var onFocusOut = messageOn("focusout");
+   var onMouseDown = messageOn("mousedown");
+   var onMouseMove = messageOn("mousemove");
+   var onMouseOut = messageOn("mouseout");
+   var onMouseOver = messageOn("mouseover");
+   var onMouseUp = messageOn("mouseup");
+   _elm.Svg.Events.values = {_op: _op
+                            ,onBegin: onBegin
+                            ,onEnd: onEnd
+                            ,onRepeat: onRepeat
+                            ,onAbort: onAbort
+                            ,onError: onError
+                            ,onResize: onResize
+                            ,onScroll: onScroll
+                            ,onLoad: onLoad
+                            ,onUnload: onUnload
+                            ,onZoom: onZoom
+                            ,onActivate: onActivate
+                            ,onClick: onClick
+                            ,onFocusIn: onFocusIn
+                            ,onFocusOut: onFocusOut
+                            ,onMouseDown: onMouseDown
+                            ,onMouseMove: onMouseMove
+                            ,onMouseOut: onMouseOut
+                            ,onMouseOver: onMouseOver
+                            ,onMouseUp: onMouseUp};
+   return _elm.Svg.Events.values;
 };
 Elm.Task = Elm.Task || {};
 Elm.Task.make = function (_elm) {
